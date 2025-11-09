@@ -1,27 +1,34 @@
-import React, { useEffect } from 'react'
-import useWordle from '../hooks/useWordle'
+import React, { useEffect } from 'react';
+import useWordle from '../hooks/useWordle';
 import Grid from './Grid';
+import Keyboard from './Keyboard';
+import MessageModal from './MessageModal';
 
-function Wordle({solution}) {
-    const {currentGuess, handleKeyup, guesses, isCorrect, turn} = useWordle(solution);
+function Wordle({ solution, length, onGameEnd, savedGameState }) {
+  const { 
+    currentGuess, 
+    handleKeyup, 
+    guesses, 
+    isCorrect, 
+    turn, 
+    gameOver, 
+    message,
+    usedKeys,
+    closeMessage 
+  } = useWordle(solution, length, onGameEnd, savedGameState);
 
-    useEffect(() => {
-        window.addEventListener('keyup', handleKeyup);
+  useEffect(() => {
+    window.addEventListener('keyup', handleKeyup);
+    return () => window.removeEventListener('keyup', handleKeyup);
+  }, [handleKeyup]);
 
-        return () => window.removeEventListener('keyup', handleKeyup);
-    }, [handleKeyup]);
-
-    useEffect(() => {
-        console.log(guesses, turn, isCorrect);
-    }, [guesses, turn, isCorrect]);
-
-  return ( 
+  return (
     <div>
-        <div>Current Guess: {currentGuess}</div>
-        <Grid currentGuess={currentGuess} guesses={guesses} turn={turn}/>
-      
+      <Grid currentGuess={currentGuess} guesses={guesses} turn={turn} length={length} />
+      <Keyboard usedKeys={usedKeys} onKeyClick={handleKeyup} />
+      <MessageModal message={message} onClose={closeMessage} />
     </div>
-  )
+  );
 }
 
-export default Wordle
+export default Wordle;
