@@ -78,7 +78,7 @@ const useWordle = (solution, length, onGameEnd, savedGameState) => {
     if (won) {
       setIsCorrect(true);
       setGameOver(true);
-      setMessage('🎉 Congratulations! You won! 🎉');
+      setMessage(`🎉 Correct! The word was ${solution}`);
       onGameEnd(true, turn + 1);
     } else if (turn >= 5) {
       setGameOver(true);
